@@ -1,0 +1,17 @@
+.vscode/
+env.py
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+settings.json
+db.sqlite3
+core.Microsoft*
+core.mongo*
+core.python*
+node_modules/
+.github/
+cloudinary_python.txt
+.venv
+blog/fixtures/
