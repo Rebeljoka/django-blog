@@ -14,4 +14,5 @@ node_modules/
 .github/
 cloudinary_python.txt
 .venv
+.flake8
 blog/fixtures/
