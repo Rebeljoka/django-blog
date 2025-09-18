@@ -8,7 +8,13 @@ STATUS = ((0, "Draft"), (1, "Published"))
 
 
 class Post(models.Model):
+    """
+    Model representing a blog post.
+    Includes title, image, slug, author, content,
+    timestamps, status, and excerpt. :model:`auth.User`
+    """
     title = models.CharField(max_length=200, unique=True)
+    featured_image = CloudinaryField('image', default='placeholder')
     slug = models.SlugField(max_length=200, unique=True)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="blog_posts")
@@ -19,13 +25,24 @@ class Post(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """
+        Meta class for Post specifying default ordering by newest first.
+        """
         ordering = ["-created_on"]
 
     def __str__(self):
+        """
+        String representation of the Post, showing title and author.
+        """
         return f"{self.title} | written by {self.author}"
 
 
 class Comment(models.Model):
+    """
+    Model representing a comment on a blog post.
+    Includes reference to post,
+    author, image, body, approval status, and timestamp.
+    """
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(
@@ -36,7 +53,13 @@ class Comment(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        """
+        Meta class for Comment specifying default ordering by oldest first.
+        """
         ordering = ["created_on"]
 
     def __str__(self):
+        """
+        String representation of the Comment, showing body and author.
+        """
         return f"{self.body} | written by {self.author}"

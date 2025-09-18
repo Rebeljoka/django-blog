@@ -8,6 +8,9 @@ from .forms import CommentForm
 
 # Create your views here.
 class PostList(generic.ListView):
+    """
+    View to display a paginated list of published blog posts on the index page.
+    """
     queryset = Post.objects.filter(status=1)
     template_name = "blog/index.html"
     paginate_by = 6
@@ -15,18 +18,10 @@ class PostList(generic.ListView):
 
 def post_detail(request, slug):
     """
-    Display an individual :model:`blog.Post`.
-
-    **Context**
-
-    ``post``
-        An instance of :model:`blog.Post`.
-
-    **Template:**
-
-    :template:`blog/post_detail.html`
+    View to display an individual blog post and its comments.
+    Handles comment submission via POST.
+    Renders the 'blog/post_detail.html' template with post, comments, and form.
     """
-
     queryset = Post.objects.filter(status=1)
     post = get_object_or_404(queryset, slug=slug)
     comments = post.comments.all().order_by("-created_on")
@@ -58,10 +53,11 @@ def post_detail(request, slug):
 
 def comment_edit(request, slug, comment_id):
     """
-    view to edit comments
+    View to edit an existing comment on a blog post.
+    Only allows the comment author to edit their own comment.
+    Redirects back to the post detail page after editing.
     """
     if request.method == "POST":
-
         queryset = Post.objects.filter(status=1)
         post = get_object_or_404(queryset, slug=slug)
         comment = get_object_or_404(Comment, pk=comment_id)
@@ -74,14 +70,17 @@ def comment_edit(request, slug, comment_id):
             comment.save()
             messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
         else:
-            messages.add_message(request, messages.ERROR, 'Error updating comment!')
+            messages.add_message(request, messages.ERROR,
+                                 'Error updating comment!')
 
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
 
 def comment_delete(request, slug, comment_id):
     """
-    view to delete comment
+    View to delete a comment from a blog post.
+    Only allows the comment author to delete their own comment.
+    Redirects back to the post detail page after deletion.
     """
     queryset = Post.objects.filter(status=1)
     post = get_object_or_404(queryset, slug=slug)
@@ -91,6 +90,7 @@ def comment_delete(request, slug, comment_id):
         comment.delete()
         messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
     else:
-        messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
+        messages.add_message(request, messages.ERROR,
+                             'You can only delete your own comments!')
 
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))

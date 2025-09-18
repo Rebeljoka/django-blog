@@ -5,6 +5,11 @@ from django_summernote.admin import SummernoteModelAdmin
 
 @admin.register(Post)
 class PostAdmin(SummernoteModelAdmin):
+    """
+    Admin configuration for the Post model using,
+    Summernote for rich text editing.
+    Customizes list display, search, filter, and slug prepopulation.
+    """
     list_display = ('title', 'slug', 'status')
     search_fields = ['title', 'content']
     list_filter = ('status', 'created_on',)
