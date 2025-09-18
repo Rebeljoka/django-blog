@@ -7,7 +7,7 @@
     <div class="row align-items-center">
         <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
             {% if "placeholder" in about.profile_image.url %}
-            <img src="{% static 'images/nobody.jpg' %}" class="profile-image" alt="placeholder image">
+            <img src="{% static 'images/Nobody.jpg' %}" class="profile-image" alt="placeholder image">
             {% else %}
             <img src="{{ about.profile_image.url }}" class="profile-image" alt="{{ about.title }}">
             {% endif %}
